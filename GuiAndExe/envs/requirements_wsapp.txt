@@ -1,0 +1,15 @@
+altgraph==0.17.3
+certifi @ file:///C:/b/abs_85o_6fm0se/croot/certifi_1671487778835/work/certifi
+cx-Freeze==6.14.2
+cx-Logging==3.1.0
+future==0.18.3
+lief==0.12.3
+pefile==2022.5.30
+pyinstaller==5.7.0
+pyinstaller-hooks-contrib==2022.15
+PySide6==6.4.2
+PySide6-Addons==6.4.2
+PySide6-Essentials==6.4.2
+pywin32-ctypes==0.2.0
+shiboken6==6.4.2
+wincertstore==0.2
