@@ -43,6 +43,9 @@ PythonのGUIパッケージを活用して、高度/大規模なアプリは向�
 % Normal
 pyinstaller testTK.py --clean --onefile --noconsole --icon ./icon/penguin.ico --name TestApp
 
+% openpyxlが入っている場合
+pyinstaller gui.py --noconsole --clean --hidden-import=openpyxl,openpyxl.cell._writer
+
 % specファイル使用パターン
 pyinstaller testTK.spec
 ```
