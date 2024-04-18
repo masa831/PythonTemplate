@@ -1,13 +1,7 @@
 # PythonTemplate
 Pythonの各種テンプレートをまとめた
 
-## 概要
-
-## 環境設定
-
-環境名：enviroment
-
-### pip 基本操作
+## pip 基本操作
 
 ```bash
 
@@ -15,22 +9,40 @@ Pythonの各種テンプレートをまとめた
 python -m venv envname
 
 % 仮想環境起動
+% windows
 envname\Scripts\activate
+% linux
+source .venv/bin/activate
 
 % 仮想環境終了
 (envname)> deactivate
 
 % pythonの場所確認
+% windows
 where python
+% linux
+which python
 
 % 環境を外部保存
 pip freeze > requirements.txt
 
 % requirementsから環境作成
 python -m pip install -r requirements.txt
-python -m pip install --proxy http://userID:Password@hg-vm-prx-sdc.t.rd.honda.com:8080 -r requirements.txt
+python -m pip install --proxy http://xxxxxx -r requirements.txt
 
 ```
+
+## vscode & ipynb & venv
+
+必要パッケージをインストール
+```bash
+# 必要パッケージをインストール
+pip install ipython ipykernel
+
+# 仮想環境をカーネルに追加
+ipython kernel install --user --name=Jupyter-kernel
+```
+
 
 ### Vscode & pip 環境設定
 
@@ -63,30 +75,140 @@ python -m pip install --proxy http://userID:Password@yyyyyy.com xxxx
 
 ```
 
-## openpyxlについて
+## 開発環境
 
-#### 読み込みオプションとセル内の関数について
+注意：flake8,mypyなどはパッケージをインストールする場合と拡張機能を使う場合とで設定が異なる
 
-Excel内のセルに計算式が埋め込まれている場合、基本的にはload_workbook()のオプション"data_only=True"とすることで計算結果を取得できる。
-しかし、Excelの仕様上、関数の計算式は開いたときに更新されるため、ツール等で自動処理した際には、値が再評価されていない状態となっている。
-そのような計算式が更新されていない状態では、openpyxlでは、値を取得できない。("None"となる。)
-よって、上記の状況の対処法として、マージ処理実行前に取得した機能ファイルは保存し直す処理を入れている。
+### 関数ヒント
 
-参考URL
-<https://buzz-server.com/tech/python-openpyxl-no-value-cause/>
-<https://teratail.com/questions/328690>
+<https://zenn.dev/yamasakit/articles/dc9ed1acd5ae3b>
+<https://zenn.dev/k0kishima/articles/5466aaeb57be7a>
 
-#### 結合セルのコピーについて
+### pep8
 
-openpyxlは、結合セルに対して、"左上だけが書き換え可能、それ以外は読み取り専用"という振る舞いをする。
-よって、例えば、コピー処理をする際に、コピー元ファイルの任意のセルが結合セルではなく、値が入っており、
-コピー先ファイルでは、結合セルとなっており、かつ結合の先頭セルではない場合にはエラーが出る。
-コピー元、先で結合セルが範囲がずれている＆値が異なっている場合はエラーとなる。
+以下の設定はflake8をパッケージでインストールした場合の設定となる
 
-#### セルのコメントのサイズについて
+pep8 エラーコードチートシート  
+<https://qiita.com/KuruwiC/items/8e12704e338e532eb34a>  
 
-Excelファイルに対して、プログラム実行後は処理にかかわらず、セルのコメントボックスサイズと位置が初期化されてしまう。  
-ファイルのデータを読み込む際にもセルのコメントボックスサイズなどのデータは取得することができないため、
-コメントを新たに生成する場合のみ、サイズを指定できる状態となっている。
-→openpyxl自体がこのあたりの処理に対応してないようで、現状思いつく解決策はVBAとPythonの組み合わせ。できるかは不明
+詳細設定（settings.json）
+VSCodeの settings.json ファイルで、flake8の詳細設定を行うことができます。  
+以下の手順で設定ファイルを開きます。
 
+Code メニューを開き、「設定」 を選択します。  
+左側のメニューで 「ワークスペース設定」 を選択します。  
+右側のエディタに settings.json と入力し、Enterキーを押します。  
+settings.json ファイルが開いたら、以下の例のように設定を追加できます。  
+
+```json
+{
+  // ... 他の設定 ...
+
+  "python.flake8.enabled": true,              // Flake8を有効にする
+  "python.flake8.runOnSave": true,           // コード保存時に自動チェックを実行
+  "python.flake8.exclude": [                 // チェック対象から除外するファイルパス
+    ".git",
+    "node_modules",
+  ],
+  "python.flake8.ignore": [                   // 無視するエラー・警告コード
+    "E126",
+    "W391",
+  ],
+  "python.flake8.args": [                    // Flake8に渡す引数
+    "--show-source",
+    "--statistics",
+  ],
+  "python.flake8.useStandardConfiguration": false, // 標準設定を使用しない
+  "python.flake8.customConfigurationFile": "/path/to/flake8.cfg", // カスタム設定ファイルのパス
+}
+```
+
+設定項目の説明
+
+python.flake8.enabled: Flake8を有効にするかどうかを設定します。  
+python.flake8.runOnSave: コード保存時に自動的にチェックを実行するかどうかを設定します。  
+python.flake8.exclude: チェック対象から除外するファイルパスのリストを設定します。  
+python.flake8.ignore: 無視するエラー・警告コードのリストを設定します。  
+python.flake8.args: Flake8に渡す引数をリスト形式で設定します。  
+python.flake8.useStandardConfiguration: 標準設定を使用するかどうかを設定します。false に設定すると、python.flake8.customConfigurationFile で指定したカスタム設定ファイルを使用します。  
+python.flake8.customConfigurationFile: カスタム設定ファイルのパスを設定します。  
+
+詳細設定例
+
+特定のディレクトリ以下のファイルをチェック対象から除外する  
+```json
+"python.flake8.exclude": [
+  ".git",
+  "node_modules",
+  "**/tests/*"
+]
+
+特定のエラー・警告コードを無視する
+
+```json
+"python.flake8.ignore": [
+  "E126",  // 行末に空白がない
+  "W391",  // 単一行の`import`ステートメント
+]
+```
+
+flake8.cfg ファイルでカスタム設定を行う
+
+プロジェクトディレクトリに flake8.cfg ファイルを作成します。  
+以下の例のように設定を記述します。  
+
+```ini
+Ini, TOML
+[flake8]
+select = E,W,F
+max-line-length = 100
+exclude = .git,node_modules
+```
+
+settings.json で python.flake8.useStandardConfiguration を false に設定し、python.flake8.customConfigurationFile で flake8.cfg ファイルのパスを設定します。
+```json
+{
+  // ... 他の設定 ...
+
+  "python.flake8.enabled": true,
+  "python.flake8.runOnSave": true,
+  "python.flake8.useStandardConfiguration": false,
+  "python.flake8.customConfigurationFile": "flake8.cfg",
+}
+```
+
+## docstring (googlestyle)
+
+```python
+def func(arg1, arg2):
+    """概要
+
+    詳細説明
+
+    Args:
+        引数(arg1)の名前 (引数(arg1)の型): 引数(arg1)の説明
+        引数(arg2)の名前 (:obj:`引数(arg2)の型`, optional): 引数(arg2)の説明
+
+    Returns:
+        戻り値の型: 戻り値の説明
+
+    Raises:
+        例外の名前: 例外の説明
+
+    Yields:
+        戻り値の型: 戻り値についての説明
+
+    Examples:
+
+        関数の使い方
+
+        >>> func(5, 6)
+        11
+
+    Note:
+        注意事項や注釈など
+
+    """
+   value = arg1 + arg2
+   return value
+```
