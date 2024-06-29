@@ -75,6 +75,25 @@ python -m pip install --proxy http://userID:Password@yyyyyy.com xxxx
 
 ```
 
+### requirement.txt
+
+pipreqsを使用することで必要最低限のrequirements.txtを作成することができる。
+
+参考URL：<https://jitaku.work/it/language/python/pipreqs/>
+
+```bash
+# 一般的な生成方法
+pip freeze > requirements.txt
+
+# pipreqs
+pipreqs .
+# 文字コードでエラーが出たときの対処
+pipreqs --encoding=iso-8859-1 .
+# フォルダを指定する場合
+pipreqs --encoding=iso-8859-1 .\Streamlit
+
+```
+
 ## 開発環境
 
 注意：flake8,mypyなどはパッケージをインストールする場合と拡張機能を使う場合とで設定が異なる

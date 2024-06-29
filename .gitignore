@@ -160,5 +160,10 @@ cython_debug/
 #.idea/
 
 # 個人で追加
-enviroment
-.vscode/*
+# _から始まるファイル/フォルダを除外
+.**
+_**
+# __から始まるファイル/フォルダは反映
+!__**
+# cache
+__pycache__
