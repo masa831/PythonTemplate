@@ -1,0 +1,10 @@
+[project]
+name = "test_package_toml"
+version = "0.1.3"
+description = "パッケージの説明文"
+authors = [{name = "Pradyun Gedam", email = "pradyun@example.com"}]
+
+
+[project.scripts]
+# コマンド名 = モジュール:関数
+myscript = "test_package"
