@@ -1,0 +1,10 @@
+{
+    "flake8.args": [
+        "--config=.config/flake8"
+    ],
+
+    "mypy-type-checker.args": [
+        "--config-file=.config/mypy.ini"
+    ],
+
+}

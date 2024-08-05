@@ -1,0 +1,15 @@
+[flake8]
+select = E,F,W,D101,D102,D103
+; select = D,E,F,W
+
+; 最大行長
+max-line-length = 80
+
+; docstring
+docstring-convention = google
+
+; 無視するエラーコード
+; ignore = E,F,W,D
+
+;  除外するファイルやディレクトリ
+; exclude = docs,xx
