@@ -2,6 +2,11 @@
 
 ## memo
 
+覚書
+
+<https://qiita.com/not13/items/dcd8c12d64982dc0e819>
+
+
 ```bash
 % cd
 cd Streamlit
