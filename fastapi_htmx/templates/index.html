@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI + HTMX TSP Solver</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ローディングスピナーのCSS */
+        .htmx-indicator {
+            display: none; /* デフォルトでは非表示 */
+        }
+        .htmx-request .htmx-indicator {
+            display: inline-block; /* htmx-request クラスが付与されたら表示 */
+        }
+        .htmx-request.htmx-indicator {
+            display: inline-block; /* htmx-request クラスが付与されたら表示 */
+        }
+        /* ボタンが disable された時のスタイル（htmxが自動でクラス付与しない場合もあるので注意） */
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-xl w-full bg-white p-8 rounded-lg shadow-lg">
+        <img src="{{ url_for('static', path='/map_icon.png') }}" alt="Map Icon" class="w-10 h-10">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">TSP最適化ツール</h1>
+
+        <form hx-post="/calculate_tsp" 
+              hx-target="#graph-container" 
+              hx-swap="innerHTML" 
+              hx-indicator="#loading-spinner"
+              hx-trigger="submit"
+              class="space-y-6">
+
+            <div>
+                <label for="start_point" class="block text-sm font-medium text-gray-700">スタート地点:</label>
+                <input type="text" id="start_point" name="start_point" 
+                       value="A" 
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                       placeholder="例: 都市A">
+            </div>
+
+            <div>
+                <label for="end_point" class="block text-sm font-medium text-gray-700">ゴール地点:</label>
+                <input type="text" id="end_point" name="end_point" 
+                       value="B" 
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                       placeholder="例: 都市B">
+            </div>
+
+            <button type="submit" 
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                    hx-disable-element="#calculate-button"  {# ボタン自身を無効化する #}
+                    id="calculate-button"> 
+                <span class="inline-flex items-center">
+                    計算開始
+                    <span id="loading-spinner" class="htmx-indicator ml-2">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                </span>
+            </button>
+        </form>
+
+        <div id="graph-container" class="mt-8 p-4 border border-gray-300 rounded-md bg-gray-50 text-center min-h-[300px] flex items-center justify-center">
+            {% block graph_area %} {# Jinja2 の block を定義 #}
+                {% if graph_url %}
+                    <img src="{{ graph_url }}" alt="TSP Optimal Route Graph" class="max-w-full h-auto">
+                {% else %}
+                    <p class="text-gray-500">計算結果のグラフがここに表示されます。</p>
+                {% endif %}
+            {% endblock %}
+        </div>
+
+    </div>
+</body>
+</html>
